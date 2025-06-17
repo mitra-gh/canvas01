@@ -19,9 +19,7 @@ export const Canvas: FC = () => {
         type: "ADD_TO_CANVAS",
         payload: {
           canvasShape: {
-            id: `${appContext?.selectedTool}-${
-              appContext.canvasShapes.length + 1
-            }`,
+            id: `${appContext?.selectedTool}-${Date.now()}`,
             varient: appContext?.selectedTool,
             x: e.clientX - canvasX - SHPE_SIZE / 2,
             y: e.clientY - canvasY - SHPE_SIZE / 2,
