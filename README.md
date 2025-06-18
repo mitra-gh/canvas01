@@ -1,54 +1,100 @@
-# React + TypeScript + Vite
+# دستگرمی دوم ساخت بوم نقاشی با استفاده از React Js
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## ساختار کلی پروژه
 
-Currently, two official plugins are available:
+اجزای صفحه این پروژه عبارت است از:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- بخش Header: شامل دکمه های import و export بوم، همچنین تغییر نام تصویر
+- بخش بدنه: این بخش شامل سایدبار، بوم و فوتر است که با استفاده از آن ها می‌توان اشکال را انتخاب کرد و ترسیم شان کرد.
+  ![Uploading Screenshot 2025-06-18 121055.png…]()
 
-## Expanding the ESLint configuration
+## نحوه کارکرد پروژه
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+برای استفاده از این پروژه شما می‌توانید بر بروی شکل مورد نظرتان روی سایدبار یا فوتر کلیک کنید، سپس با کلیک بر روی بوم می‌توانید شکل را در آن محل ترسیم کنید. با دابل کلیک بر روی شکل آن شکل پاک می‌شود. همچنین برای importو export می‌توانید از دکمه‌هایی با همین نام در هدر استفاده کنید.
+هر تصویر نامی دارد که از تغییر هدر قسمت قابل تغییر است.
+
+## پیاده سازی پروژه
+
+شما می‌توانید ساختار کلی پروژه را از فایل App.tsx دنبال کنید:
 
 ```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
+function App() {
+  return (
+    <AppContextProvider>
+      <div className="app">
+        <Header />
+        <div className="app-body">
+          <Sidebar />
+          <section className="main-section">
+            <Canvas />
+            <Footer />
+          </section>
+        </div>
+      </div>
+    </AppContextProvider>
+  );
+}
+```
+
+اینجا ما از یک کانتکست برای نگه‌داری ساختار کلی بوم استفاده میکنیم. استیت اولیه بوم در فایل appContext.tsx قابل مشاهده است:
+
+```js
+const [appStates, dispatch] = useReducer(appReducer, {
+  appTitle: "Untiteld",
+  appShapes: {
+    circle: 0,
+    square: 0,
+    triangle: 0,
+  },
+  selectedTool: undefined,
+  canvasShapes: [],
+});
+```
+
+حال اجزای این props را شرح میدهیم:
+
+- عنوان: appTitle عنوان تصویر را نشان میدهد.
+- تعداد اشکال: این Object را نگه میدارد.
+- شکل انتخاب شده: selectedTool نشان میدهد در حال حاضر کدام شکل قرار است روی بوم کشیده شود.
+- آرایه شکل های روی بوم: canvasShapes آرایه ای از اشیای روی بوم است.
+  یک فایل json که از طریق export در سیستم ذخیره می شود نیز ساختاری به این شکل دارد:
+
+```json
+{
+  "appTitle": "ssss",
+  "canvasShapes": [
+    {
+      "id": "circle-1750182385765",
+      "varient": "circle",
+      "x": 352,
+      "y": 6.43333435058594
     },
-  },
-})
+    {
+      "id": "circle-1750182387784",
+      "varient": "circle",
+      "x": 624,
+      "y": 72.4333343505859
+    },
+    {
+      "id": "circle-1750182388777",
+      "varient": "circle",
+      "x": 824,
+      "y": 125.433334350586
+    },
+    {
+      "id": "square-1750182390361",
+      "varient": "square",
+      "x": 742,
+      "y": 239.433334350586
+    },
+    {
+      "id": "triangle-1750182393309",
+      "varient": "triangle",
+      "x": 454,
+      "y": 151.433334350586
+    }
+  ]
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+همانطور که می بینید تنها عنوان و آرایه اشکال داخل بوم ذخیره میشوند زیرا appShapes را می توان از روی آرایه ایجاد کرد همچنین به محض import تصویری نباید شکلی انتخاب شده باشد.
