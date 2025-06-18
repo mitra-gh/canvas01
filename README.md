@@ -6,7 +6,7 @@
 
 - بخش Header: شامل دکمه های import و export بوم، همچنین تغییر نام تصویر
 - بخش بدنه: این بخش شامل سایدبار، بوم و فوتر است که با استفاده از آن ها می‌توان اشکال را انتخاب کرد و ترسیم شان کرد.
-  ![Uploading Screenshot 2025-06-18 121055.png…]()
+  ![Sample of project](https://github.com/mitra-gh/canvas01/blob/main/img/sample.png)
 
 ## نحوه کارکرد پروژه
 
